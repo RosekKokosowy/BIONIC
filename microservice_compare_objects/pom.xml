@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>backend</groupId>
-    <artifactId>microservice_compare_cars</artifactId>
+    <artifactId>microservice_compare_objects</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>microservice_compare_cars</name>
-    <description>microservice_compare_cars</description>
+    <name>microservice_compare_objects</name>
+    <description>microservice_compare_objects</description>
     <properties>
         <java.version>17</java.version>
     </properties>
