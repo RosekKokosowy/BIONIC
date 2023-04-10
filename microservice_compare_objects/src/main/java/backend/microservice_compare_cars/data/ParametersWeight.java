@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class ParametersWeight {
-    private boolean yearOfManufacture;
-    private boolean mileage;
-    private boolean price;
-    private boolean horsePower;
-    private boolean typeOfFuel;
-    private boolean gearBox;
+    private double yearOfManufacture;
+    private double mileage;
+    private double price;
+    private double horsePower;
+    private double typeOfFuel;
+    private double gearBox;
 }
