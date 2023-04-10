@@ -1,8 +1,7 @@
 package backend.microservice_compare_cars;
 
-import backend.microservice_compare_cars.data.Car;
+import backend.microservice_compare_cars.data.CarParameters;
 import backend.microservice_compare_cars.services.CarService;
-import dev.failsafe.internal.util.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,8 @@ class MicroserviceCompareCarsApplicationTests {
     private CarService carService;
     @Test
     void whenApplicationStarts_thenHibernateCreatesInitialRecords() {
-        List<Car> cars = carService.list();
-        Assertions.assertEquals(1,cars.size());
+        List<CarParameters> carsParameters = carService.list();
+        Assertions.assertEquals(1, carsParameters.size());
     }
 
 
