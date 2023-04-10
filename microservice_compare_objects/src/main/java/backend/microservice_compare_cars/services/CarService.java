@@ -13,7 +13,7 @@ public class CarService {
     @Autowired
     private CarRepository carRepository;
     public List<CarParameters> list(){
-        CarParameters carParameters = new CarParameters(
+        CarParameters carParameters1 = new CarParameters(
                 1,
                 2018,
                 220000,
@@ -22,7 +22,7 @@ public class CarService {
                 "AUTOMATIC",
                 "AWD"
                 );
-        carRepository.save(carParameters);
+        carRepository.save(carParameters1);
         log.info(carRepository.findAll().toString());
         return carRepository.findAll();
     }

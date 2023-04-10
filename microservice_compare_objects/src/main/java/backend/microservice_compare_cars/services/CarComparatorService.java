@@ -1,87 +1,51 @@
-package com.company;
+package backend.microservice_compare_cars.services;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
+@Service
+public class CarComparatorService {
 
-public class CarComparator {
+    private double [] car_1;
+    private double [] car_2;
+    private double [] weights;
 
-    private float[] car_1;
-    private float[] car_2;
-    private float[] weights;
+    private double [] car_1_normalized={1};
+    private double [] car_2_normalized={1};
 
-    private String car_1_fuel;
-    private String car_2_fuel;
-
-    private String car_1_wheels;
-    private String car_2_wheels;
-
-    private String car_1_gearbox;
-    private String car_2_gearbox;
-
-    private float[] car_1_normalized;
-    private float[] car_2_normalized;
-
-    private float car1_result;
-    private float car2_result;
+    private double  car1_result;
+    private double  car2_result;
 
     //protects from normalization and calculation before initialization
     private boolean init_block = false;
     private boolean normal_block = false;
     private boolean boundaries_block = false;
 
-    private float[] max_value;
-    private float[] min_value;
+    private double [] max_value;
+    private double [] min_value;
 
-    private int[] inverse;
-
-    public ArrayList<String> fuel_types;
-    public ArrayList<String> wheel_types;
-    public ArrayList<String> gear_types;
 
     public Dictionary<String, String> uncountable_params;
 
     //bob the builder
-    //data required by the constructor: (car1 params type: float[], car2 params type: float[], weights type: float[],
-    //                                   min values for params type: float[], max values for params type: float[],
-    //                                   indexes of inverted parameters type: float[] *-1 if there are none*,
+    //data required by the constructor: (car1 params type: double [], car2 params type: double [], weights type: double [],
+    //                                   min values for params type: double [], max values for params type: double [],
+    //                                   indexes of inverted parameters type: double [] *-1 if there are none*,
     //                                   car1 wheel drive type: String *available: awd, rwd, fwd*, car2 wheel drive
     //                                   type: String, car1 fuel type: String *available: petrol, diesel, electric,
     //                                   gas, hydrogen. , 3 strings: preferred fuel, wheels and gearbox type: ArrayList<String>)
-    public CarComparator( float[] a, float[] b, float[] w, float[] min, float[] max, int[] inv,
-                          String a_wheels, String b_wheels, String a_fuel, String b_fuel,
-                          String a_gear, String b_gear, ArrayList<String> uncountable_parameters)
+
+
+    public void setObject( double [] a, double [] b, double [] w, double [] min, double [] max, int[] inv)
     {
         //TODO
         //NOWA FUNCKCJA LICZĄCA TYPE OF FUEL I GEARBOX
-        fuel_types.add("diesel");
-        fuel_types.add("gas");
-        fuel_types.add("petrol");
-        fuel_types.add("electric");
-        fuel_types.add("hydrogen");
-
-        wheel_types.add("4wd");
-        wheel_types.add("fwd");
-        wheel_types.add("rwd");
-
-        gear_types.add("manual");
-        gear_types.add("automatic");
-
-        uncountable_params.put("fuel", uncountable_parameters.get(0));
-        uncountable_params.put("wheels", uncountable_parameters.get(1));
-        uncountable_params.put("gearbox", uncountable_parameters.get(2));
 
         car_1 = a;
         car_2 = b;
         weights = w;
-
-        car_1_wheels = a_wheels.toLowerCase();
-        car_2_wheels = b_wheels.toLowerCase();
-
-        car_1_fuel = a_fuel.toLowerCase();
-        car_2_fuel = b_fuel.toLowerCase();
-
-        car_1_gearbox = a_gear.toLowerCase();
-        car_2_gearbox = b_gear.toLowerCase();
 
         init_block = true;
 
@@ -101,27 +65,6 @@ public class CarComparator {
     {
         calculate_preference();
 
-        float calculated_value_1 = car1_result / car_1.length;
-        float calculated_value_2 = car2_result / car_2.length;
-
-        if(car_1_fuel.compareTo(uncountable_params.get("fuel")) == 0)
-            car1_result += calculated_value_1;
-
-        if(car_2_fuel.compareTo(uncountable_params.get("fuel")) == 0)
-            car2_result += calculated_value_2;
-
-        if(car_1_wheels.compareTo(uncountable_params.get("wheels")) == 0)
-            car1_result += calculated_value_1;
-
-        if(car_2_wheels.compareTo(uncountable_params.get("wheels")) == 0)
-            car2_result += calculated_value_2;
-
-        if(car_1_gearbox.compareTo(uncountable_params.get("gearbox")) == 0)
-            car1_result += calculated_value_1;
-
-        if(car_2_gearbox.compareTo(uncountable_params.get("gearbox")) == 0)
-            car2_result += calculated_value_2;
-
         return car1_result > car2_result ? 1 : 2;
     }
 
@@ -133,7 +76,7 @@ public class CarComparator {
             if(inv[0] != -1)
             {
                 for (int j : inv) {
-                    float temp = min_value[j];
+                     double temp = min_value[j];
                     min_value[j] = max_value[j];
                     max_value[j] = temp;
                 }
@@ -142,7 +85,7 @@ public class CarComparator {
     }
 
     //initializes the min and max values for each car trait
-    public void set_boundaries( float[] min, float[] max)
+    public void set_boundaries( double [] min, double [] max)
     {
         min_value = min;
         max_value = max;
@@ -205,71 +148,6 @@ public class CarComparator {
         }
 
         boolean condition = false;
-        for(String j : fuel_types)
-        {
-            if (car_1_fuel.compareTo(j) == 0) {
-                condition = true;
-                break;
-            }
-        }
-        if(!condition)
-            throw new Exception("wrong value in car1 fuel type: " + car_1_fuel);
-        condition = false;
-
-        for(String j : fuel_types)
-        {
-            if (car_2_fuel.compareTo(j) == 0) {
-                condition = true;
-                break;
-            }
-        }
-        if(!condition)
-            throw new Exception("wrong value in car2 fuel type: " + car_2_fuel);
-        condition = false;
-
-        for(String j : wheel_types)
-        {
-            if (car_1_wheels.compareTo(j) == 0) {
-                condition = true;
-                break;
-            }
-        }
-        if(!condition)
-            throw new Exception("wrong value in car1 wheel type: " + car_1_wheels);
-        condition = false;
-
-        for(String j : wheel_types)
-        {
-            if (car_2_wheels.compareTo(j) == 0) {
-                condition = true;
-                break;
-            }
-        }
-        if(!condition)
-            throw new Exception("wrong value in car2 wheel type: " + car_2_wheels);
-        condition = false;
-
-        for(String j : gear_types)
-        {
-            if (car_1_gearbox.compareTo(j) == 0) {
-                condition = true;
-                break;
-            }
-        }
-        if(!condition)
-            throw new Exception("wrong value in car1 gearbox type: " + car_1_gearbox);
-        condition = false;
-
-        for(String j : gear_types)
-        {
-            if (car_2_gearbox.compareTo(j) == 0) {
-                condition = true;
-                break;
-            }
-        }
-        if(!condition)
-            throw new Exception("wrong value in car2 gearbox type: " + car_2_gearbox);
-        condition = false;
 
     }
 }
