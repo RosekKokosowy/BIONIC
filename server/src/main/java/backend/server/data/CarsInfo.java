@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 @Data
 public class CarsInfo {
-    long id;
+    ArrayList<CarParameters> carsParameters;
     ParametersWeight parametersWeight;
-    ArrayList<CarParameters> cars;
 }
