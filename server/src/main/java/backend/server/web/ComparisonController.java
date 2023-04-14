@@ -27,6 +27,8 @@ public class ComparisonController {
         try{
             log.info("POST");
             log.info(String.valueOf(carsInfo));
+            return ResponseEntity.ok(carsInfo.getCarsParameters().get(0).getId());
+            /* Poniższy kod odkomentować i usunac return powyzej, kiedy zostana zmienione klasy POJO w mikroserwisie !
             CarParameters car = restTemplate.postForObject(
                     microservice_url,
                     carsInfo,
@@ -34,6 +36,7 @@ public class ComparisonController {
             );
             log.info(String.valueOf(car));
             return ResponseEntity.ok(car.getId());
+            */
         }catch (NullPointerException e){
             e.printStackTrace();
             log.info("ERROR");
