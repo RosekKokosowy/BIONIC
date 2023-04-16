@@ -4,7 +4,6 @@ import backend.microservice_compare_cars.data.CarParameters;
 import backend.microservice_compare_cars.data.CarsInfo;
 import backend.microservice_compare_cars.data.ParametersWeight;
 import backend.microservice_compare_cars.services.CarComparatorService;
-import backend.microservice_compare_cars.services.CarService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +21,8 @@ public class CompareController {
         this.carComparatorService = carComparatorService;
     }
 
-    @GetMapping
-    public ResponseEntity<Integer> processData(@RequestBody CarsInfo carsInfo) {
+    @PostMapping
+    public ResponseEntity<CarParameters> processData(@RequestBody CarsInfo carsInfo) {
 //        double[] carA = {
 //                carsInfo.getCarsParameters().get(0).getYearOfManufacture(),
 //                carsInfo.getCarsParameters().get(0).getPrice(),
@@ -35,17 +34,17 @@ public class CompareController {
 //                carsInfo.getCarsParameters().get(1).getHorsePower()
 //        };
 //        double[] w = {parametersWeight.getYearOfManufacture(),parametersWeight.getPrice(),parametersWeight.getHorsePower()};
-        double[] min = {1900,0,0};
-        double[] max = {2023,1000000,1500};
-        int[] inv = {1};
-        carComparatorService.setObject(
-                carsInfo,
-                min,
-                max,
-                inv
-        );
-        int res = carComparatorService.PerformAnalisis();
-        log.info("result " + res);
-        return ResponseEntity.ok(res);
+//        double[] min = {1900,0,0};
+//        double[] max = {2023,1000000,1500};
+//        int[] inv = {1};
+//        carComparatorService.setObject(
+//                carsInfo,
+//                min,
+//                max,
+//                inv
+//        );
+//        int res = carComparatorService.PerformAnalisis();
+//        log.info("result " + res);
+        return ResponseEntity.ok(carsInfo.getCarsParameters().get(0));
     }
 }
