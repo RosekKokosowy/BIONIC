@@ -1,5 +1,6 @@
 package backend.microservice_compare_cars.services;
 
+import backend.microservice_compare_cars.data.CarsInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +59,10 @@ public class CarComparatorService {
         }
 
         swap_boundaries(inv);
+    }
+
+    public void setObject(CarsInfo carsInfo, double[] min, double[] max, int[] inv) {
+        //TODO
     }
 
     //function returns the prefered car (1 or 2)
