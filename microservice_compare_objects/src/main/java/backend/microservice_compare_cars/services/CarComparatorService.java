@@ -1,20 +1,30 @@
 package backend.microservice_compare_cars.services;
 
+import backend.microservice_compare_cars.data.CarParameters;
 import backend.microservice_compare_cars.data.CarsInfo;
+import backend.microservice_compare_cars.data.ParametersWeight;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Dictionary;
 @Service
 public class CarComparatorService {
 
-    private double [] car_1;
-    private double [] car_2;
-    private double [] weights;
+    private final int NUMBER_OF_PARAMS = 4;
 
-    private double [] car_1_normalized={1};
-    private double [] car_2_normalized={1};
+    private double [] min;
+    private double [] max;
+    private int [] inv;
+
+    CarParameters car_1;
+    CarParameters car_2;
+
+    ParametersWeight weights;
+
+    CarParameters car_1_normalized;
+    CarParameters car_2_normalized;
 
     private double  car1_result;
     private double  car2_result;
@@ -23,10 +33,6 @@ public class CarComparatorService {
     private boolean init_block = false;
     private boolean normal_block = false;
     private boolean boundaries_block = false;
-
-    private double [] max_value;
-    private double [] min_value;
-
 
     public Dictionary<String, String> uncountable_params;
 
@@ -37,20 +43,16 @@ public class CarComparatorService {
     //                                   car1 wheel drive type: String *available: awd, rwd, fwd*, car2 wheel drive
     //                                   type: String, car1 fuel type: String *available: petrol, diesel, electric,
     //                                   gas, hydrogen. , 3 strings: preferred fuel, wheels and gearbox type: ArrayList<String>)
+    public void setObject(CarsInfo carsInfo) {
 
+        car_1 = carsInfo.getCarsParameters().get(0);
+        car_2 = carsInfo.getCarsParameters().get(1);
 
-    public void setObject( double [] a, double [] b, double [] w, double [] min, double [] max, int[] inv)
-    {
-        //TODO
-        //NOWA FUNCKCJA LICZĄCA TYPE OF FUEL I GEARBOX
-
-        car_1 = a;
-        car_2 = b;
-        weights = w;
+        weights = carsInfo.getParametersWeight();
 
         init_block = true;
 
-        set_boundaries(min, max);
+        set_boundaries();
 
         try {
             check_integrity();
@@ -58,11 +60,7 @@ public class CarComparatorService {
             e.printStackTrace();
         }
 
-        swap_boundaries(inv);
-    }
-
-    public void setObject(CarsInfo carsInfo, double[] min, double[] max, int[] inv) {
-        //TODO
+        swap_boundaries();
     }
 
     //function returns the prefered car (1 or 2)
@@ -70,30 +68,44 @@ public class CarComparatorService {
     {
         calculate_preference();
 
-        return car1_result > car2_result ? 1 : 2;
+        return car1_result > car2_result ? car_1.getId() : car_2.getId();
     }
 
-    private void swap_boundaries(int[] inv)
+    private void swap_boundaries()
     {
         if(boundaries_block)
         {
-            //loop for inverting boundaries (if smaller == better for example mileage)
-            if(inv[0] != -1)
+            for(int i : inv)
             {
-                for (int j : inv) {
-                     double temp = min_value[j];
-                    min_value[j] = max_value[j];
-                    max_value[j] = temp;
-                }
+                double temp = min[i];
+                min[i] = max[i];
+                max[i] = temp;
             }
         }
     }
 
     //initializes the min and max values for each car trait
-    public void set_boundaries( double [] min, double [] max)
+    public void set_boundaries()
     {
-        min_value = min;
-        max_value = max;
+        //yearOfManufacture
+        min[0] = 1950;
+        max[0] = Year.now().getValue();
+
+        //mileage
+        min[1] = 0;
+        max[1] = 1000000;
+
+        //price
+        min[2] = 0;
+        max[2] = 5000000;
+
+        //horsePower
+        min[3] = 0;
+        max[3] = 1500;
+
+        //inverse values (higher == worse)
+        inv[0] = 1; //mileage
+        inv[1] = 2; //price
 
         boundaries_block = true;
     }
@@ -103,10 +115,78 @@ public class CarComparatorService {
     {
         car1_result = 0;
         car2_result = 0;
-        for(int i = 0 ; i < car_1_normalized.length ; i++)
-        {
-            car1_result += car_1_normalized[i] * weights[i];
-            car2_result += car_2_normalized[i] * weights[i];
+
+        car1_result += car_1_normalized.getYearOfManufacture() * weights.getYearOfManufacture();
+        car2_result += car_2_normalized.getYearOfManufacture() * weights.getYearOfManufacture();
+
+        car1_result += car_1_normalized.getMileage() * weights.getMileage();
+        car2_result += car_2_normalized.getMileage() * weights.getMileage();
+
+        car1_result += car_1_normalized.getPrice() * weights.getPrice();
+        car2_result += car_2_normalized.getPrice() * weights.getPrice();
+
+        car1_result += car_1_normalized.getHorsePower() * weights.getHorsePower();
+        car2_result += car_2_normalized.getHorsePower() * weights.getHorsePower();
+
+        double average_1 = car1_result/NUMBER_OF_PARAMS;
+        double average_2 = car2_result/NUMBER_OF_PARAMS;
+
+        switch(car_1.getTypeOfFuel().toLowerCase()){
+            case "diesel":
+                if(weights.getTypeOfFuel() > 0.5 && weights.getTypeOfFuel() <= 0.75)
+                    car1_result += average_1;
+                break;
+            case "gas":
+                if(weights.getTypeOfFuel() > 0.2 && weights.getTypeOfFuel() <= 0.5)
+                    car1_result += average_1;
+                break;
+            case "petrol":
+                if(weights.getTypeOfFuel() > 0.75)
+                    car1_result += average_1;
+                break;
+            case "electric":
+                if(weights.getTypeOfFuel() >= 0 && weights.getTypeOfFuel() <= 0.2)
+                    car1_result += average_1;
+        }
+
+        switch(car_2.getTypeOfFuel().toLowerCase()){
+            case "diesel":
+                if(weights.getTypeOfFuel() > 0.5 && weights.getTypeOfFuel() <= 0.75)
+                    car2_result += average_2;
+                break;
+            case "gas":
+                if(weights.getTypeOfFuel() > 0.2 && weights.getTypeOfFuel() <= 0.5)
+                    car2_result += average_2;
+                break;
+            case "petrol":
+                if(weights.getTypeOfFuel() > 0.75)
+                    car2_result += average_2;
+                break;
+            case "electric":
+                if(weights.getTypeOfFuel() >= 0 && weights.getTypeOfFuel() <= 0.2)
+                    car2_result += average_2;
+        }
+
+        switch(car_1.getGearBox().toLowerCase()){
+            case "manual":
+                if(weights.getGearBox() > 0.5)
+                    car1_result += average_1;
+                break;
+            case "automatic":
+                if(weights.getGearBox() <= 0.5)
+                    car1_result += average_1;
+                break;
+        }
+
+        switch(car_2.getGearBox().toLowerCase()){
+            case "manual":
+                if(weights.getGearBox() > 0.5)
+                    car2_result += average_2;
+                break;
+            case "automatic":
+                if(weights.getGearBox() <= 0.5)
+                    car2_result += average_2;
+                break;
         }
     }
 
@@ -115,11 +195,17 @@ public class CarComparatorService {
     {
         if(init_block && boundaries_block)
         {
-            for(int i = 0 ; i < car_1.length ; i++)
-            {
-                car_1_normalized[i] = car_1[i]/(max_value[i] - min_value[i]);
-                car_2_normalized[i] = car_2[i]/(max_value[i] - min_value[i]);
-            }
+            car_1_normalized.setYearOfManufacture(car_1.getYearOfManufacture()/(max[0] - min[0]));
+            car_2_normalized.setYearOfManufacture(car_2.getYearOfManufacture()/(max[0] - min[0]));
+
+            car_1_normalized.setMileage(car_1.getMileage()/(max[1] - min[1]));
+            car_2_normalized.setMileage(car_2.getMileage()/(max[1] - min[1]));
+
+            car_1_normalized.setPrice(car_1.getPrice()/(max[2] - min[2]));
+            car_2_normalized.setPrice(car_2.getPrice()/(max[2] - min[2]));
+
+            car_1_normalized.setHorsePower(car_1.getHorsePower()/(max[3] - min[3]));
+            car_2_normalized.setHorsePower(car_2.getHorsePower()/(max[3] - min[3]));
 
             normal_block = true;
         }
@@ -127,30 +213,30 @@ public class CarComparatorService {
 
     //makes sure the data given is acceptable
     private void check_integrity() throws Exception {
-        int baseline = car_1.length;
-
-        if(car_2.length != baseline || weights.length != baseline)
-            throw new Exception("mismatched trait and weight array lengths: \ncar1 " + baseline + "\ncar2 " + car_2.length
-                    + "\nweights " + weights.length);
-
-        if(max_value.length != baseline || min_value.length != baseline)
-            throw new Exception("mismatched boundaries lengths: \ncar1 " + baseline + "\nmax " + max_value.length
-                    + "\nmin " + min_value.length);
-
-        for(int i = 0 ; i < baseline ; i++)
-        {
-            if(car_1[i] < min_value[i] || car_1[i] > max_value[i])
-                throw new Exception("mismatched limits and values:\ncar1: " + car_1[i] + "\nmin: " + min_value[i]
-                        + "\nmax: " + max_value[i]);
-            if(car_2[i] < min_value[i] || car_2[i] > max_value[i])
-                throw new Exception("mismatched limits and values:\ncar2: " + car_2[i] + "\nmin: " + min_value[i]
-                        + "\nmax: " + max_value[i]);
-        }
-
-        for(int i = 0 ; i < max_value.length ; i++)
-        {
-            if(max_value[i] == min_value[i])  throw new Exception("max_value = min_value at index: " + i + " Cannot divide by zero!");
-        }
+//        int baseline = car_1.length;
+//
+//        if(car_2.length != baseline || weights.length != baseline)
+//            throw new Exception("mismatched trait and weight array lengths: \ncar1 " + baseline + "\ncar2 " + car_2.length
+//                    + "\nweights " + weights.length);
+//
+//        if(max_value.length != baseline || min_value.length != baseline)
+//            throw new Exception("mismatched boundaries lengths: \ncar1 " + baseline + "\nmax " + max_value.length
+//                    + "\nmin " + min_value.length);
+//
+//        for(int i = 0 ; i < baseline ; i++)
+//        {
+//            if(car_1[i] < min_value[i] || car_1[i] > max_value[i])
+//                throw new Exception("mismatched limits and values:\ncar1: " + car_1[i] + "\nmin: " + min_value[i]
+//                        + "\nmax: " + max_value[i]);
+//            if(car_2[i] < min_value[i] || car_2[i] > max_value[i])
+//                throw new Exception("mismatched limits and values:\ncar2: " + car_2[i] + "\nmin: " + min_value[i]
+//                        + "\nmax: " + max_value[i]);
+//        }
+//
+//        for(int i = 0 ; i < max_value.length ; i++)
+//        {
+//            if(max_value[i] == min_value[i])  throw new Exception("max_value = min_value at index: " + i + " Cannot divide by zero!");
+//        }
 
         boolean condition = false;
 

@@ -23,28 +23,11 @@ public class CompareController {
 
     @PostMapping
     public ResponseEntity<CarParameters> processData(@RequestBody CarsInfo carsInfo) {
-//        double[] carA = {
-//                carsInfo.getCarsParameters().get(0).getYearOfManufacture(),
-//                carsInfo.getCarsParameters().get(0).getPrice(),
-//                carsInfo.getCarsParameters().get(0).getHorsePower()
-//        };
-//        double[] carB = {
-//                carsInfo.getCarsParameters().get(1).getYearOfManufacture(),
-//                carsInfo.getCarsParameters().get(1).getPrice(),
-//                carsInfo.getCarsParameters().get(1).getHorsePower()
-//        };
-//        double[] w = {parametersWeight.getYearOfManufacture(),parametersWeight.getPrice(),parametersWeight.getHorsePower()};
-//        double[] min = {1900,0,0};
-//        double[] max = {2023,1000000,1500};
-//        int[] inv = {1};
-//        carComparatorService.setObject(
-//                carsInfo,
-//                min,
-//                max,
-//                inv
-//        );
-//        int res = carComparatorService.PerformAnalisis();
-//        log.info("result " + res);
-        return ResponseEntity.ok(carsInfo.getCarsParameters().get(0));
+        carComparatorService.setObject(
+                carsInfo
+        );
+        int res = carComparatorService.PerformAnalisis();
+        log.info("result " + res);
+        return ResponseEntity.ok(carsInfo.getCarsParameters().get(res));
     }
 }
