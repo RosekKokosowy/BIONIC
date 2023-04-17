@@ -22,4 +22,8 @@ public class CarParameters {
         this.typeOfFuel = typeOfFuel;
         this.gearBox = gearBox;
     }
+
+    public CarParameters() {
+
+    }
 }

@@ -28,6 +28,7 @@ public class CompareController {
         );
         int res = carComparatorService.PerformAnalisis();
         log.info("result " + res);
+        log.info(String.valueOf(carsInfo.getCarsParameters().get(res)));
         return ResponseEntity.ok(carsInfo.getCarsParameters().get(res));
     }
 }

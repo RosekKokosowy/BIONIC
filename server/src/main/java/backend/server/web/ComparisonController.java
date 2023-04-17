@@ -25,18 +25,18 @@ public class ComparisonController {
     @PostMapping("/compare")
     public ResponseEntity<Integer> compareCars(@RequestBody CarsInfo carsInfo){
         try{
+            carsInfo.getCarsParameters().get(0).setId(0);
+            carsInfo.getCarsParameters().get(1).setId(1);
             log.info("POST");
             log.info(String.valueOf(carsInfo));
-            return ResponseEntity.ok(carsInfo.getCarsParameters().get(0).getId());
-            /* Poniższy kod odkomentować i usunac return powyzej, kiedy zostana zmienione klasy POJO w mikroserwisie !
+//            return ResponseEntity.ok(0);
             CarParameters car = restTemplate.postForObject(
                     microservice_url,
                     carsInfo,
                     CarParameters.class
             );
-            log.info(String.valueOf(car));
+            log.info(car.toString());
             return ResponseEntity.ok(car.getId());
-            */
         }catch (NullPointerException e){
             e.printStackTrace();
             log.info("ERROR");
@@ -44,6 +44,7 @@ public class ComparisonController {
         }
     }
 }
+
 
 /*
 * Test purposes:

@@ -1,5 +1,7 @@
-package backend.microservice_compare_cars.data;
+package backend.server.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -21,5 +23,20 @@ public class CarParameters {
         this.horsePower = horsePower;
         this.typeOfFuel = typeOfFuel;
         this.gearBox = gearBox;
+    }
+
+    @JsonCreator
+    public CarParameters(@JsonProperty("typeOfFuel") String typeOfFuel,
+                         @JsonProperty("gearBox") String gearBox,
+                         @JsonProperty("yearOfManufacture") int yearOfManufacture,
+                         @JsonProperty("mileage") int mileage,
+                         @JsonProperty("price") int price,
+                         @JsonProperty("horsePower") int horsePower) {
+        this.typeOfFuel = typeOfFuel;
+        this.gearBox = gearBox;
+        this.yearOfManufacture = yearOfManufacture;
+        this.mileage = mileage;
+        this.price = price;
+        this.horsePower = horsePower;
     }
 }

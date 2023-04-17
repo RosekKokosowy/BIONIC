@@ -1,11 +1,8 @@
 package backend.server.data;
 
-import lombok.Data;
-
 import java.util.ArrayList;
 
-@Data
-public class CarsInfo {
+public class CarsInfoWithoutId {
     ArrayList<CarParameters> carsParameters;
     ParametersWeight parametersWeight;
 }

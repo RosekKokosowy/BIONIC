@@ -3,28 +3,31 @@ package backend.microservice_compare_cars.services;
 import backend.microservice_compare_cars.data.CarParameters;
 import backend.microservice_compare_cars.data.CarsInfo;
 import backend.microservice_compare_cars.data.ParametersWeight;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Dictionary;
+
 @Service
+@Slf4j
 public class CarComparatorService {
 
     private final int NUMBER_OF_PARAMS = 4;
 
-    private double [] min;
-    private double [] max;
-    private int [] inv;
+    private double [] min = new double[NUMBER_OF_PARAMS];
+    private double [] max = new double[NUMBER_OF_PARAMS];
+    private int [] inv = new int[NUMBER_OF_PARAMS];
 
     CarParameters car_1;
     CarParameters car_2;
 
     ParametersWeight weights;
 
-    CarParameters car_1_normalized;
-    CarParameters car_2_normalized;
+    CarParameters car_1_normalized = new CarParameters();
+    CarParameters car_2_normalized = new CarParameters();
 
     private double  car1_result;
     private double  car2_result;
@@ -34,8 +37,6 @@ public class CarComparatorService {
     private boolean normal_block = false;
     private boolean boundaries_block = false;
 
-    public Dictionary<String, String> uncountable_params;
-
     //bob the builder
     //data required by the constructor: (car1 params type: double [], car2 params type: double [], weights type: double [],
     //                                   min values for params type: double [], max values for params type: double [],
@@ -44,6 +45,7 @@ public class CarComparatorService {
     //                                   type: String, car1 fuel type: String *available: petrol, diesel, electric,
     //                                   gas, hydrogen. , 3 strings: preferred fuel, wheels and gearbox type: ArrayList<String>)
     public void setObject(CarsInfo carsInfo) {
+        log.info(carsInfo.toString());
 
         car_1 = carsInfo.getCarsParameters().get(0);
         car_2 = carsInfo.getCarsParameters().get(1);
@@ -68,7 +70,7 @@ public class CarComparatorService {
     {
         calculate_preference();
 
-        return car1_result > car2_result ? car_1.getId() : car_2.getId();
+        return car1_result > car2_result ? 0 : 1;
     }
 
     private void swap_boundaries()
