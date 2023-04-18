@@ -197,17 +197,17 @@ public class CarComparatorService {
     {
         if(init_block && boundaries_block)
         {
-            car_1_normalized.setYearOfManufacture(car_1.getYearOfManufacture()/(max[0] - min[0]));
-            car_2_normalized.setYearOfManufacture(car_2.getYearOfManufacture()/(max[0] - min[0]));
+            car_1_normalized.setYearOfManufacture((car_1.getYearOfManufacture() - min[0])/(max[0] - min[0]));
+            car_2_normalized.setYearOfManufacture((car_2.getYearOfManufacture() - min[0])/(max[0] - min[0]));
 
-            car_1_normalized.setMileage(car_1.getMileage()/(max[1] - min[1]));
-            car_2_normalized.setMileage(car_2.getMileage()/(max[1] - min[1]));
+            car_1_normalized.setMileage((car_1.getMileage() - min[1])/(max[1] - min[1]));
+            car_2_normalized.setMileage((car_2.getMileage() - min[1])/(max[1] - min[1]));
 
-            car_1_normalized.setPrice(car_1.getPrice()/(max[2] - min[2]));
-            car_2_normalized.setPrice(car_2.getPrice()/(max[2] - min[2]));
+            car_1_normalized.setPrice((car_1.getPrice() - min[2])/(max[2] - min[2]));
+            car_2_normalized.setPrice((car_2.getPrice() - min[2])/(max[2] - min[2]));
 
-            car_1_normalized.setHorsePower(car_1.getHorsePower()/(max[3] - min[3]));
-            car_2_normalized.setHorsePower(car_2.getHorsePower()/(max[3] - min[3]));
+            car_1_normalized.setHorsePower((car_1.getHorsePower() - min[3])/(max[3] - min[3]));
+            car_2_normalized.setHorsePower((car_2.getHorsePower() - min[3])/(max[3] - min[3]));
 
             normal_block = true;
         }
