@@ -15,7 +15,7 @@ public class CarParameters {
     private String typeOfFuel;
     private String gearBox;
 
-    public CarParameters(int id, double yearOfManufacture, double mileage, double price, double horsePower, String typeOfFuel, String gearBox, String wheelDrive) {
+    public CarParameters(int id, double yearOfManufacture, double mileage, double price, double horsePower, String typeOfFuel, String gearBox) {
         this.id = id;
         this.yearOfManufacture = yearOfManufacture;
         this.mileage = mileage;
@@ -38,5 +38,9 @@ public class CarParameters {
         this.mileage = mileage;
         this.price = price;
         this.horsePower = horsePower;
+    }
+
+    public CarParameters() {
+
     }
 }

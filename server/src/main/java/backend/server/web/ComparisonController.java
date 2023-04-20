@@ -44,9 +44,3 @@ public class ComparisonController {
         }
     }
 }
-
-
-/*
-* Test purposes:
-* {"carsParameters":[{"typeOfFuel":"GAS","gearBox":"AUTOMATIC","yearOfManufacture":"2000","mileage":"1","price":"1","horsePower":"1"},{"typeOfFuel":"GAS","gearBox":"AUTOMATIC","yearOfManufacture":"2000","mileage":"1","price":"1","horsePower":"1"}],"parametersWeight":{"yearOfManufacture":0.1,"mileageWeight":0.7,"priceWeight":0.2,"horsePowerWeight":0.4,"typeOfFuelWeight":0.3,"gearBoxWeight":0.6}}
-* */

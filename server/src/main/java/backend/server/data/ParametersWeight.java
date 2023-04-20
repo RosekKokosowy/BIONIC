@@ -13,6 +13,15 @@ public class ParametersWeight {
     private double typeOfFuel;
     private double gearBox;
 
+    public ParametersWeight(double i, double i1, double i2, double i3, double i4, double i5) {
+        this.yearOfManufacture = i;
+        this.mileage = i1;
+        this.price = i2;
+        this.horsePower = i3;
+        this.typeOfFuel = i4;
+        this.gearBox = i5;
+    }
+
     public int getNumParams()
     {
         int res = 0;
