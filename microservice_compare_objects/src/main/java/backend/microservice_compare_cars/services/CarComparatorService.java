@@ -63,6 +63,7 @@ public class CarComparatorService {
         }
 
         swap_boundaries();
+        normalize();
     }
 
     //function returns the prefered car (1 or 2)
