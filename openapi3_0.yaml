@@ -48,7 +48,7 @@ paths:
       tags:
         - comparison
       summary: Requesting a comparison from server
-      description: Requesting a comparison from a server about the objects user has provided. 
+      description: Requesting a comparison from a server about the objects user has provided.
       operationId: client-server-post-compare
       requestBody:
         description: Create a list of the cars to compare and the importance of its parameters.
@@ -66,7 +66,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarId'          
+                $ref: '#/components/schemas/CarId'
             application/xml:
               schema:
                 $ref: '#/components/schemas/CarId'
@@ -79,7 +79,7 @@ paths:
       tags:
         - comparison
       summary: Requesting a final result from the comparison conducted by the microservice_compare_cars
-      description: Requesting a comparison from a microservice_compare_cars about the objects user has provided. 
+      description: Requesting a comparison from a microservice_compare_cars about the objects user has provided.
       operationId: server-microservice_compare_cars-post-compare
       requestBody:
         description: Comparing cars by the priorities provided by the user.
@@ -97,7 +97,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarId'          
+                $ref: '#/components/schemas/CarId'
             application/xml:
               schema:
                 $ref: '#/components/schemas/CarId'
@@ -122,7 +122,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Car'
                 minItems: 2
-                maxItems: 2  
+                maxItems: 2
             application/xml:
               schema:
                 type: array
@@ -187,7 +187,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Car'
                 minItems: 20
-                maxItems: 20  
+                maxItems: 20
             application/xml:
               schema:
                 type: array
@@ -222,10 +222,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ParametersWeight' 
+                $ref: '#/components/schemas/ParametersWeight'
             application/xml:
               schema:
-                $ref: '#/components/schemas/ParametersWeight' 
+                $ref: '#/components/schemas/ParametersWeight'
         '405':
           description: Invalid input
         '500':
@@ -243,10 +243,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ParametersWeight' 
+                $ref: '#/components/schemas/ParametersWeight'
             application/xml:
               schema:
-                $ref: '#/components/schemas/ParametersWeight' 
+                $ref: '#/components/schemas/ParametersWeight'
         '405':
           description: Invalid input
         '500':
