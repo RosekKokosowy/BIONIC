@@ -26,6 +26,7 @@ paths:
     get:
       tags:
         - home
+      summary: Frontend (do uzupełnienia)
       responses:
         '200':
           description: Successful operation
@@ -37,6 +38,7 @@ paths:
     get:
       tags:
         - comparison
+      summary: Frontend (do uzupełnienia)
       responses:
         '200':
           description: Successful operation
@@ -47,8 +49,8 @@ paths:
     post:
       tags:
         - comparison
-      summary: Requesting a comparison from server
-      description: Requesting a comparison from a server about the objects user has provided.
+      summary: (client - server)
+      description: Requesting a comparison from a server about the objects user has provided. 
       operationId: client-server-post-compare
       requestBody:
         description: Create a list of the cars to compare and the importance of its parameters.
@@ -66,7 +68,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarId'
+                $ref: '#/components/schemas/CarId'          
             application/xml:
               schema:
                 $ref: '#/components/schemas/CarId'
@@ -78,8 +80,8 @@ paths:
     post:
       tags:
         - comparison
-      summary: Requesting a final result from the comparison conducted by the microservice_compare_cars
-      description: Requesting a comparison from a microservice_compare_cars about the objects user has provided.
+      summary: (server - microservice)
+      description: Requesting a comparison from a microservice_compare_cars about the objects user has provided. 
       operationId: server-microservice_compare_cars-post-compare
       requestBody:
         description: Comparing cars by the priorities provided by the user.
@@ -97,7 +99,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarId'
+                $ref: '#/components/schemas/CarId'          
             application/xml:
               schema:
                 $ref: '#/components/schemas/CarId'
@@ -109,7 +111,7 @@ paths:
     get:
       tags:
         - quiz
-      summary: Requesting an array of cars.
+      summary: (client - server)
       description: Requesting an array that contains cars. Those cars were previously selected by the microservice_select_cars.
       operationId: client-server-get-quiz
       responses:
@@ -122,7 +124,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Car'
                 minItems: 2
-                maxItems: 2
+                maxItems: 2  
             application/xml:
               schema:
                 type: array
@@ -137,7 +139,7 @@ paths:
     patch:
       tags:
         - quiz
-      summary: Partial update of the array with user's choices.
+      summary: (client - server)
       description: Passing user's choice to the server where it would be stored until the quiz is finished.
       operationId: client-server-patch-quiz
       requestBody:
@@ -160,7 +162,7 @@ paths:
     delete:
       tags:
         - quiz
-      summary: Stop quiz.
+      summary: (client - server)
       description: The user has just changed his decision and has made a decision to quit the quiz.
       operationId: client-server-delete-quiz
       responses:
@@ -174,7 +176,7 @@ paths:
     get:
       tags:
         - quiz
-      summary: Requesting an array of cars selected for comparison.
+      summary: (server - microservice)
       description: Requesting an array of cars selected for comparison.
       operationId: server-microservice_select_cars-get-quiz
       responses:
@@ -187,7 +189,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Car'
                 minItems: 20
-                maxItems: 20
+                maxItems: 20  
             application/xml:
               schema:
                 type: array
@@ -203,7 +205,7 @@ paths:
     post:
       tags:
         - quiz
-      summary: Establishing the importance of car's parameters.
+      summary: (server - microservice)
       description: Establishing the importance of car's parameters.
       operationId: server-microservice_establish_priorities-post-quiz
       requestBody:
@@ -222,10 +224,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ParametersWeight'
+                $ref: '#/components/schemas/ParametersWeight' 
             application/xml:
               schema:
-                $ref: '#/components/schemas/ParametersWeight'
+                $ref: '#/components/schemas/ParametersWeight' 
         '405':
           description: Invalid input
         '500':
@@ -234,7 +236,7 @@ paths:
     get:
       tags:
         - quiz
-      summary: Requesting the model with the importance of car's parameters.
+      summary: (client - server)
       description: Requesting the model with the importance of car's parameters.
       operationId: client-server-get-quiz-result
       responses:
@@ -243,10 +245,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ParametersWeight'
+                $ref: '#/components/schemas/ParametersWeight' 
             application/xml:
               schema:
-                $ref: '#/components/schemas/ParametersWeight'
+                $ref: '#/components/schemas/ParametersWeight' 
         '405':
           description: Invalid input
         '500':
