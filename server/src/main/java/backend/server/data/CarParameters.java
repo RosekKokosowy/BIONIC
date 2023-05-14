@@ -1,26 +1,43 @@
 package backend.server.data;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class CarParameters {
 
     private int id;
-    private int yearOfManufacture;
-    private long price;
-    private int horsePower;
+    private double yearOfManufacture;
+    private double mileage;
+    private double price;
+    private double horsePower;
     private String typeOfFuel;
     private String gearBox;
-    private String wheelDrive;
 
-    public CarParameters(int id, int yearOfManufacture, long price, int horsePower, String typeOfFuel, String gearBox, String wheelDrive) {
+    public CarParameters(int id, double yearOfManufacture, double mileage, double price, double horsePower, String typeOfFuel, String gearBox) {
         this.id = id;
         this.yearOfManufacture = yearOfManufacture;
+        this.mileage = mileage;
         this.price = price;
         this.horsePower = horsePower;
         this.typeOfFuel = typeOfFuel;
         this.gearBox = gearBox;
-        this.wheelDrive = wheelDrive;
+    }
+
+    @JsonCreator
+    public CarParameters(@JsonProperty("typeOfFuel") String typeOfFuel,
+                         @JsonProperty("gearBox") String gearBox,
+                         @JsonProperty("yearOfManufacture") int yearOfManufacture,
+                         @JsonProperty("mileage") int mileage,
+                         @JsonProperty("price") int price,
+                         @JsonProperty("horsePower") int horsePower) {
+        this.typeOfFuel = typeOfFuel;
+        this.gearBox = gearBox;
+        this.yearOfManufacture = yearOfManufacture;
+        this.mileage = mileage;
+        this.price = price;
+        this.horsePower = horsePower;
     }
 
     public CarParameters() {

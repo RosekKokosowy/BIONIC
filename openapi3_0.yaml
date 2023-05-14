@@ -1,0 +1,366 @@
+openapi: 3.0.3
+info:
+  title: BIONIC
+  description: |-
+    
+    Some useful links:
+    - [Frontend repository.](https://github.com/kasia251011/car-app-frontend)
+    - [Backend repository - server.](https://github.com/RosekKokosowy/BIONIC---server)
+    - [Backend repository - microservice responsible for comparing cars.](https://github.com/RosekKokosowy/BIONIC---microservice_compare_cars)
+    - [Backend repository - microservice responsible for selecting cars from database that are used during quiz.](https://github.com/RosekKokosowy/BIONIC---microservice_select_cars)
+    - [Backend repository - microservice responsible for establishing priorities of the user based on the quiz.](https://github.com/RosekKokosowy/BIONIC---microservice_establish_priorities)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: 235847@edu.p.lodz.pl
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+paths:
+  /home:
+    get:
+      tags:
+        - home
+      responses:
+        '200':
+          description: Successful operation
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /car/compare:
+    get:
+      tags:
+        - comparison
+      responses:
+        '200':
+          description: Successful operation
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+    post:
+      tags:
+        - comparison
+      summary: Requesting a comparison from server
+      description: Requesting a comparison from a server about the objects user has provided. 
+      operationId: client-server-post-compare
+      requestBody:
+        description: Create a list of the cars to compare and the importance of its parameters.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarsInfo'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CarsInfo'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarId'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CarId'
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /car/compare/comparison:
+    post:
+      tags:
+        - comparison
+      summary: Requesting a final result from the comparison conducted by the microservice_compare_cars
+      description: Requesting a comparison from a microservice_compare_cars about the objects user has provided. 
+      operationId: server-microservice_compare_cars-post-compare
+      requestBody:
+        description: Comparing cars by the priorities provided by the user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarsInfo'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CarsInfo'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarId'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CarId'
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /car/quiz:
+    get:
+      tags:
+        - quiz
+      summary: Requesting an array of cars.
+      description: Requesting an array that contains cars. Those cars were previously selected by the microservice_select_cars.
+      operationId: client-server-get-quiz
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+                minItems: 2
+                maxItems: 2  
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+                minItems: 2
+                maxItems: 2
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+    patch:
+      tags:
+        - quiz
+      summary: Partial update of the array with user's choices.
+      description: Passing user's choice to the server where it would be stored until the quiz is finished.
+      operationId: client-server-patch-quiz
+      requestBody:
+        description: Passing an id of the car that the user selected.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarId'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CarId'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+    delete:
+      tags:
+        - quiz
+      summary: Stop quiz.
+      description: The user has just changed his decision and has made a decision to quit the quiz.
+      operationId: client-server-delete-quiz
+      responses:
+        '200':
+          description: Successful operation
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /car/quiz/selection:
+    get:
+      tags:
+        - quiz
+      summary: Requesting an array of cars selected for comparison.
+      description: Requesting an array of cars selected for comparison.
+      operationId: server-microservice_select_cars-get-quiz
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+                minItems: 20
+                maxItems: 20  
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+                minItems: 20
+                maxItems: 20
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /car/quiz/priorities:
+    post:
+      tags:
+        - quiz
+      summary: Establishing the importance of car's parameters.
+      description: Establishing the importance of car's parameters.
+      operationId: server-microservice_establish_priorities-post-quiz
+      requestBody:
+        description: Passing user's choices.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuizInfo'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/QuizInfo'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParametersWeight' 
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ParametersWeight' 
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+  /car/quiz/result:
+    get:
+      tags:
+        - quiz
+      summary: Requesting the model with the importance of car's parameters.
+      description: Requesting the model with the importance of car's parameters.
+      operationId: client-server-get-quiz-result
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParametersWeight' 
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ParametersWeight' 
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+components:
+  schemas:
+    CarsInfo:
+      type: object
+      properties:
+        carsParameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarParameters'
+        parametersWeight:
+          $ref: '#/components/schemas/ParametersWeight'
+    CarParameters:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        yearOfManufacture:
+          type: integer
+          format: int32
+        price:
+          type: integer
+          format: int64
+        horsePower:
+          type: integer
+          format: int32
+        typeOfFuel:
+          type: string
+        gearBox:
+          type: string
+        wheelDrive:
+          type: string
+      required:
+        - id
+        - yearOfManufacture
+        - price
+        - horsePower
+        - typeOfFuel
+        - gearBox
+        - wheelDrive
+    Car:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        img:
+          type: string
+        yearOfManufacture:
+          type: integer
+          format: int32
+        price:
+          type: integer
+          format: int64
+        horsePower:
+          type: integer
+          format: int32
+        typeOfFuel:
+          type: string
+        gearBox:
+          type: string
+        wheelDrive:
+          type: string
+      required:
+        - id
+        - yearOfManufacture
+        - price
+        - horsePower
+        - typeOfFuel
+        - gearBox
+        - wheelDrive
+    ParametersWeight:
+      type: object
+      properties:
+        yearOfManufacture:
+          type: number
+          format: double
+        mileage:
+          type: number
+          format: double
+        price:
+          type: number
+          format: double
+        horsePower:
+          type: number
+          format: double
+        typeOfFuel:
+          type: number
+          format: double
+        gearBox:
+          type: number
+          format: double
+    CarId:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+      required:
+        - id
+    QuizInfo:
+      type: object
+      properties:
+        cars:
+          type: array
+          items:
+            $ref: '#/components/schemas/Car'
+        choices:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarId'

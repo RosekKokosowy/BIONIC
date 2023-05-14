@@ -1,4 +1,4 @@
-package backend.server.data;
+package backend.microservice_compare_cars.data;
 
 import lombok.Data;
 
