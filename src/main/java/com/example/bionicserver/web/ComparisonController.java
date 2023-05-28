@@ -2,6 +2,7 @@ package com.example.bionicserver.web;
 
 import com.example.bionicserver.data.CarParameters;
 import com.example.bionicserver.data.CarsInfo;
+import com.example.bionicserver.data.ParametersWeight;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,38 +10,64 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 @Slf4j
 @RestController
 @RequestMapping("/car")
 public class ComparisonController {
 
+    private final CarsInfo carsInfo;
     private final RestTemplate restTemplate;
-    private final String microservice_url = "http://localhost:8081/car/compare/comparison";
+    private final String microservice_compare_url = "http://localhost:8081/car/compare/comparison";
 
     @Autowired
     public ComparisonController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+        this.carsInfo = new CarsInfo();
     }
 
     @PostMapping("/compare")
-    public ResponseEntity<Integer> compareCars(@RequestBody CarsInfo carsInfo){
+    public ResponseEntity<Integer> getCars(@RequestBody CarParameters[] carParameters){
         try{
+            carsInfo.setCarsParameters(new ArrayList<>());
+            carsInfo.getCarsParameters().addAll(Arrays.asList(carParameters));
             carsInfo.getCarsParameters().get(0).setId(0);
             carsInfo.getCarsParameters().get(1).setId(1);
-            log.info("POST");
-            log.info(String.valueOf(carsInfo));
-//            return ResponseEntity.ok(0);
+
+            return sendForComparison();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PostMapping("/priorities")
+    public ResponseEntity<Integer> getPriorities(@RequestBody ParametersWeight parametersWeight){
+        try{
+            carsInfo.setParametersWeight(parametersWeight);
+
+            return sendForComparison();
+        }catch (NullPointerException e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    private ResponseEntity<Integer> sendForComparison() {
+        if(carsInfo.getCarsParameters() != null && carsInfo.getParametersWeight() != null){
             CarParameters car = restTemplate.postForObject(
-                    microservice_url,
+                    microservice_compare_url,
                     carsInfo,
                     CarParameters.class
             );
-            log.info(car.toString());
+            carsInfo.setCarsParameters(null);
+            carsInfo.setParametersWeight(null);
             return ResponseEntity.ok(car.getId());
-        }catch (NullPointerException e){
-            e.printStackTrace();
-            log.info("ERROR");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+        else{
+            return ResponseEntity.ok().build();
         }
     }
 }
