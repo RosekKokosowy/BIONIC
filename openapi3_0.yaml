@@ -21,13 +21,10 @@ info:
 tags:
   - name: car
     description: Car comparison
-  # - name: store
-  #   description: Access to Petstore orders
-  #   externalDocs:
-  #     description: Find out more about our store
-  #     url: http://swagger.io
-  # - name: user
-  #   description: Operations about user
+  - name: priorities
+    description: Priorities of car parameters 
+  - name: quiz
+    description: Quiz wchich helps AI to find best priorities
 paths:
   /car/compare:
     post:
@@ -54,26 +51,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CarId'
-        '405':
-          description: Invalid input
-        '500':
-          description: Internal error
-  /car/priorities:
-    post:
-      tags:
-        - car
-      summary: Post priorities
-      description: Post priorities of car parameters that was set maunal
-      operationId:  client-server-post-priorities
-      requestBody: 
-        description: Priorities of car parameters
-        content: 
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ParametersWeight'
-      responses: 
-        '200':
-          description: Successful operation
         '405':
           description: Invalid input
         '500':
@@ -110,6 +87,40 @@ paths:
           description: Invalid input
         '500':
           description: Internal error
+  /priorities:
+    get:
+      tags: 
+        - priorities
+      summary: Get actual priorities (client-server)
+      description: Get priorities of car parameters that was set maunal or set by finished quiz
+      operationId: client-server-get-priorities
+      responses: 
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParametersWeights'
+    post:
+      tags:
+        - priorities
+      summary: Post priorities (client-server)
+      description: Post priorities of car parameters that was set maunal
+      operationId:  client-server-post-priorities
+      requestBody: 
+        description: Priorities of car parameters
+        content: 
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ParametersWeights'
+      responses: 
+        '200':
+          description: Successful operation
+        '405':
+          description: Invalid input
+        '500':
+          description: Internal error
+
   /quiz:
     get:
       tags:
@@ -217,28 +228,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ParametersWeight' 
+                $ref: '#/components/schemas/ParametersWeights' 
             application/xml:
               schema:
-                $ref: '#/components/schemas/ParametersWeight' 
-        '405':
-          description: Invalid input
-        '500':
-          description: Internal error
-  /quiz/result:
-    get:
-      tags:
-        - quiz
-      summary:  Request importance of car's parameters (client - server)
-      description: Request importance of car's parameters based on quiz.
-      operationId: client-server-get-quiz-result
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ParametersWeight' 
+                $ref: '#/components/schemas/ParametersWeights' 
         '405':
           description: Invalid input
         '500':
@@ -307,7 +300,7 @@ components:
           $ref: '#/components/schemas/CarParameters'
       required:
         - id
-    ParametersWeight:
+    ParametersWeights:
       type: object
       properties:
         yearOfManufacture:
