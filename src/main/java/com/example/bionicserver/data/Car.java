@@ -1,16 +1,29 @@
 package com.example.bionicserver.data;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class Car {
+@NoArgsConstructor
+@Entity
+public class Car implements Serializable {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
     private String img;
-    private CarParameters carParameters;
+    private double yearOfManufacture;
+    private double mileage;
+    private double price;
+    private double horsePower;
+    private String typeOfFuel;
+    private String gearBox;
 }

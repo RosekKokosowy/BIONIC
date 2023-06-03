@@ -1,7 +1,9 @@
-package com.example.bionicserver.data;
+package com.example.bionicserver.dtos;
 
+import com.example.bionicserver.data.Car;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -9,8 +11,10 @@ import java.util.ArrayList;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class QuizInfo {
-    public static final int MAX_SIZE = 10;
+@NoArgsConstructor
+public class QuizDto {
     private ArrayList<Car> cars;
     private ArrayList<Integer> choices;
+    private int showed = 0;
+    public static final int MAX_SIZE = 10;
 }
