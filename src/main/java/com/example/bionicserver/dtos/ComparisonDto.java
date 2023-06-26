@@ -11,7 +11,6 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
 @NoArgsConstructor
 public class ComparisonDto {
     private List<Car> cars;

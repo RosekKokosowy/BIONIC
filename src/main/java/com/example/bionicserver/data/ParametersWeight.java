@@ -11,7 +11,6 @@ import java.lang.reflect.Field;
 
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 public class ParametersWeight implements Serializable {

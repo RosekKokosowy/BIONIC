@@ -10,11 +10,10 @@ import java.util.ArrayList;
 
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
 @NoArgsConstructor
 public class QuizDto {
     private ArrayList<Car> cars;
     private ArrayList<Integer> choices;
     private int showed = 0;
-    public static final int MAX_SIZE = 10;
+    public static final int MAX_SIZE = 36;
 }

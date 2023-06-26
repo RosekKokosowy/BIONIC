@@ -21,10 +21,10 @@ public class ComparisonController {
     }
 
     @PostMapping("/compare")
-    public ResponseEntity<Long> getCars(@RequestBody CarsDto carsToCompare){
+    public ResponseEntity<Long> getCars(@RequestBody CarsDto cars){
         try{
-            carsToCompare = comparisonService.assignProperties(carsToCompare);
-            Long selectedId =  comparisonService.sendForComparison(carsToCompare);
+            cars = comparisonService.assignProperties(cars);
+            Long selectedId =  comparisonService.sendForComparison(cars);
             return ResponseEntity.ok(selectedId);
         }catch (NullPointerException e){
             e.printStackTrace();

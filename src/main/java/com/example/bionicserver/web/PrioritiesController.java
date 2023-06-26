@@ -25,6 +25,8 @@ public class PrioritiesController {
     public ResponseEntity<ParametersWeight> getParams(){
         try{
             return ResponseEntity.ok(prioritiesService.getParams());
+        }catch(NullPointerException e){
+            return ResponseEntity.ok().build();
         }catch (Exception e){
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);

@@ -1,18 +1,14 @@
 package com.example.bionicserver.web;
 
 import com.example.bionicserver.data.Car;
-import com.example.bionicserver.data.ParametersWeight;
-import com.example.bionicserver.dtos.QuizDto;
 import com.example.bionicserver.services.QuizService;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -39,9 +35,9 @@ public class QuizController {
     }
 
     @PatchMapping
-    public ResponseEntity<Void> updateQuiz(@RequestParam Integer carId){
+    public ResponseEntity<Void> updateQuiz(@RequestBody Map<String, Integer> body){
         try{
-            quizService.saveChoice(carId);
+            quizService.saveChoice(body.get("id"));
             return ResponseEntity.ok().build();
         }catch (Exception e){
             e.printStackTrace();

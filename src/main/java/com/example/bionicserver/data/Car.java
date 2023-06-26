@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
 public class Car implements Serializable {
@@ -20,10 +19,10 @@ public class Car implements Serializable {
     private Long id;
     private String name;
     private String img;
-    private double yearOfManufacture;
-    private double mileage;
-    private double price;
-    private double horsePower;
+    private String yearOfManufacture;
+    private String mileage;
+    private String price;
+    private String horsePower;
     private String typeOfFuel;
     private String gearBox;
 }

@@ -6,12 +6,14 @@ import com.example.bionicserver.data.ParametersWeight;
 import com.example.bionicserver.dtos.CarsDto;
 import com.example.bionicserver.dtos.QuizDto;
 import com.example.bionicserver.repositories.ParametersWeightRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 
+@Slf4j
 @Service
 public class QuizService {
 
@@ -38,7 +40,11 @@ public class QuizService {
 
 
     public void handleQuiz() throws NullPointerException{
-        if(quizDto.getShowed() == QuizDto.MAX_SIZE){
+        if(quizDto.getShowed() >= QuizDto.MAX_SIZE){
+
+            log.info(String.valueOf(quizDto));
+            log.info(String.valueOf(quizDto.getChoices().size()));
+            log.info(String.valueOf(quizDto.getCars().size()));
 
             ParametersWeight parametersWeight = restTemplate.postForObject(
                     microservice_priorities_url,
@@ -56,6 +62,7 @@ public class QuizService {
         }
         else{
             quizDto.setShowed(quizDto.getShowed()+2);
+            log.info(String.valueOf(quizDto.getShowed()));
         }
     }
 
